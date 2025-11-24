@@ -32,8 +32,7 @@ sudo pacman -S jq dialog
 {
     "rices_dir": "~/Rices",
     "buffer_dir": "~/.config_buffer",
-    "buffer_size": 2,
-    "use_symlinks": false
+    ...
 }
 ```
 
