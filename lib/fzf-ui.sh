@@ -37,3 +37,35 @@ show_main_menu() {
     ;;
   esac
 }
+
+show_config_menu() {
+  if [[ ! -d "$RICES_DIR" ]]; then
+    echo "Error: Rices directory not found: $RICES_DIR"
+    read -p "Press enter to continue..."
+    show_main_menu
+    return
+  fi
+
+  local configs=()
+  for config in "$RICES_DIR"/*; do
+    if [[ -d "$config" ]]; then
+      configs+=("$(basename "$config")")
+    fi
+  done
+
+  if [[ ${#configs[@]} -eq 0 ]]; then
+    echo "No configs found in $RICES_DIR"
+    read -p "Press enter to continue..."
+    show_main_menu
+    return
+  fi
+
+  local selected_config=$(printf "%s\n" "${configs[@]}" | fzf --height=15 --header="Select Config")
+
+  if [[ -n "$selected_config" ]]; then
+    switch_to_config "$selected_config"
+    read -p "Press enter to continue..."
+  fi
+
+  show_main_menu
+}
