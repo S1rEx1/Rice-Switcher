@@ -2,6 +2,8 @@
 
 A beautiful CLI tool for managing and switching between different configuration sets on Linux.
 
+https://github.com/user-attachments/assets/0aa35c83-7151-4cab-a45a-c2b7f409e521
+
 ## Features
 
 - 🌙 **Beautiful TUI** - Modern FZF-based interface with icons and colors
