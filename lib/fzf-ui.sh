@@ -9,13 +9,14 @@ check_fzf_dependency() {
 }
 
 show_main_menu() {
-  local choice=$(printf "Switch Config\nList Configs\nSettings\nHelp\nExit" | fzf --height=15 --header="🌙 Config Switcher")
+  local choice=$(printf "Switch Config\nList Configs\nSettings\nHelp\nExit" | fzf --height=15 --header="🌙 Config Switcher" --prompt="❯ ")
 
   case "$choice" in
   "Switch Config")
     show_config_menu
     ;;
   "List Configs")
+    clear
     list_available_configs
     read -p "Press enter to continue..."
     show_main_menu
@@ -24,6 +25,7 @@ show_main_menu() {
     show_settings_menu
     ;;
   "Help")
+    clear
     show_help
     read -p "Press enter to continue..."
     show_main_menu
@@ -60,7 +62,12 @@ show_config_menu() {
     return
   fi
 
-  local selected_config=$(printf "%s\n" "${configs[@]}" | fzf --height=15 --header="Select Config")
+  local selected_config=$(printf "%s\n" "${configs[@]}" | fzf \
+    --height=15 \
+    --header="Select Config (Enter to select, ESC to go back)" \
+    --prompt="❯ " \
+    --preview="echo 'Preview: {}'; ls -la '$RICES_DIR/{}' 2>/dev/null | head -20" \
+    --preview-window=right:60%:wrap)
 
   if [[ -n "$selected_config" ]]; then
     switch_to_config "$selected_config"
@@ -69,7 +76,6 @@ show_config_menu() {
 
   show_main_menu
 }
-
 show_settings_menu() {
   local choice=$(printf "View Current Settings\nChange Rices Directory\nChange Buffer Directory\nToggle Symlinks Mode\nChange Buffer Size\nToggle Auto Backup\nToggle Confirmations\nReset to Defaults\nBack to Main Menu" | fzf --height=15 --header="Settings")
 
