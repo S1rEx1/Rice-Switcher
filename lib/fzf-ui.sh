@@ -9,7 +9,36 @@ check_fzf_dependency() {
 }
 
 show_main_menu() {
-  local choice=$(printf "󰚌 Switch Config\n󰈙 List Configs\n󰒓 Settings\n Help\n󰗼 Exit" | fzf --height=15 --header="🌙 Config Switcher" --prompt="❯ " --ansi)
+  local preview_cmd='
+        if [[ {} =~ "List Configs" ]]; then
+            echo "󰈙 Available Configs:"
+            echo "──────────────────"
+            ls -1 "'"$RICES_DIR"'" 2>/dev/null | head -5
+            echo ""
+            echo "Total: $(ls -1 "'"$RICES_DIR"'" 2>/dev/null | wc -l) configs"
+        elif [[ {} =~ "Switch Config" ]]; then
+            echo "󰚌 Switch to a different config"
+            echo ""
+            echo "Current mode: $([[ "'"$USE_SYMLINKS"'" == "true" ]] && echo "symlinks" || echo "copy")"
+        elif [[ {} =~ "Settings" ]]; then
+            echo "󰒓 Configure application settings"
+            echo ""
+            echo "Symlinks: $([[ "'"$USE_SYMLINKS"'" == "true" ]] && echo "󰄲" || echo "󰄱")"
+            echo "Buffer: '"$BUFFER_SIZE"' backups"
+        elif [[ {} =~ "Help" ]]; then
+            echo " Show help and usage information"
+        else
+            echo "󰗼 Exit the application"
+        fi
+    '
+
+  local choice=$(printf "󰚌 Switch Config\n󰈙 List Configs\n󰒓 Settings\n Help\n󰗼 Exit" | fzf \
+    --height=15 \
+    --header="🌙 Config Switcher" \
+    --prompt="❯ " \
+    --ansi \
+    --preview="$preview_cmd" \
+    --preview-window=right:60%:wrap)
 
   case "$choice" in
   *"Switch Config")
@@ -19,6 +48,7 @@ show_main_menu() {
     clear
     show_enhanced_config_list
     read -p "Press enter to continue..."
+    clear
     show_main_menu
     ;;
   *"Settings")
@@ -28,6 +58,7 @@ show_main_menu() {
     clear
     show_enhanced_help
     read -p "Press enter to continue..."
+    clear
     show_main_menu
     ;;
   *"Exit")

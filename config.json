@@ -5,7 +5,7 @@
   "use_symlinks": "true",
   "auto_backup": false,
   "backup_on_switch": true,
-  "confirm_actions": "true",
+  "confirm_actions": "false",
   "theme": "default",
   "log_level": "info",
   "max_log_files": 5,
