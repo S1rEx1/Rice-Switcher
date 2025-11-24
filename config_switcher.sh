@@ -1,10 +1,9 @@
 #!/bin/bash
 
-set -e
-
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
 source "$SCRIPT_DIR/lib/utils.sh"
-source "$SCRIPT_DIR/lib/config.sh"
+source "$SCRIPT_DIR/lib/config.sh" 
 source "$SCRIPT_DIR/lib/switch.sh"
 source "$SCRIPT_DIR/lib/buffer.sh"
 source "$SCRIPT_DIR/lib/tui.sh"

@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# Main switching function
 switch_to_config() {
     local config_name="$1"
     local config_path="$RICES_DIR/$config_name"
@@ -45,7 +44,6 @@ apply_config_copy() {
     local source="$1"
     local target="$2"
     
-    # Backup current config if exists
     if [[ -d "$target" ]]; then
         backup_current_config
     fi
