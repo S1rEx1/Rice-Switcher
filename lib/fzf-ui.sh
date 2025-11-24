@@ -9,29 +9,29 @@ check_fzf_dependency() {
 }
 
 show_main_menu() {
-  local choice=$(printf "Switch Config\nList Configs\nSettings\nHelp\nExit" | fzf --height=15 --header="🌙 Config Switcher" --prompt="❯ ")
+  local choice=$(printf "󰚌 Switch Config\n󰈙 List Configs\n󰒓 Settings\n Help\n󰗼 Exit" | fzf --height=15 --header="🌙 Config Switcher" --prompt="❯ " --ansi)
 
   case "$choice" in
-  "Switch Config")
+  *"Switch Config")
     show_config_menu
     ;;
-  "List Configs")
+  *"List Configs")
     clear
-    list_available_configs
+    show_enhanced_config_list
     read -p "Press enter to continue..."
     show_main_menu
     ;;
-  "Settings")
+  *"Settings")
     show_settings_menu
     ;;
-  "Help")
+  *"Help")
     clear
-    show_help
+    show_enhanced_help
     read -p "Press enter to continue..."
     show_main_menu
     ;;
-  "Exit")
-    echo "Goodbye!"
+  *"Exit")
+    echo "󰗼 Goodbye!"
     exit 0
     ;;
   *)
@@ -42,7 +42,7 @@ show_main_menu() {
 
 show_config_menu() {
   if [[ ! -d "$RICES_DIR" ]]; then
-    echo "Error: Rices directory not found: $RICES_DIR"
+    echo "󰚌 Error: Rices directory not found: $RICES_DIR"
     read -p "Press enter to continue..."
     show_main_menu
     return
@@ -56,7 +56,7 @@ show_config_menu() {
   done
 
   if [[ ${#configs[@]} -eq 0 ]]; then
-    echo "No configs found in $RICES_DIR"
+    echo "󰚌 No configs found in $RICES_DIR"
     read -p "Press enter to continue..."
     show_main_menu
     return
@@ -64,58 +64,98 @@ show_config_menu() {
 
   local selected_config=$(printf "%s\n" "${configs[@]}" | fzf \
     --height=15 \
-    --header="Select Config (Enter to select, ESC to go back)" \
+    --header="󰚌 Select Config (Enter to select, ESC to go back)" \
     --prompt="❯ " \
-    --preview="echo 'Preview: {}'; ls -la '$RICES_DIR/{}' 2>/dev/null | head -20" \
-    --preview-window=right:60%:wrap)
+    --preview="echo '󰚌 Preview: {}'; ls -la '$RICES_DIR/{}' 2>/dev/null | head -20" \
+    --preview-window=right:60%:wrap \
+    --ansi)
 
   if [[ -n "$selected_config" ]]; then
     switch_to_config "$selected_config"
-    read -p "Press enter to continue..."
+    read -p "󰚌 Press enter to continue..."
   fi
 
   show_main_menu
 }
+
 show_settings_menu() {
-  local choice=$(printf "View Current Settings\nChange Rices Directory\nChange Buffer Directory\nToggle Symlinks Mode\nChange Buffer Size\nToggle Auto Backup\nToggle Confirmations\nReset to Defaults\nBack to Main Menu" | fzf --height=15 --header="Settings")
+  local symlink_status=$([[ "$USE_SYMLINKS" == "true" ]] && echo "󰄲" || echo "󰄱")
+  local backup_status=$([[ "$AUTO_BACKUP" == "true" ]] && echo "󰄲" || echo "󰄱")
+  local confirm_status=$([[ "$CONFIRM_ACTIONS" == "true" ]] && echo "󰄲" || echo "󰄱")
+
+  local choice=$(printf "󰒓 View Current Settings\n� Change Rices Directory\n󰆵 Change Buffer Directory\n󰒓 Toggle Symlinks Mode [$symlink_status]\n󰆊 Change Buffer Size [$BUFFER_SIZE]\n󰒓 Toggle Auto Backup [$backup_status]\n󰒓 Toggle Confirmations [$confirm_status]\n󰔄 Reset to Defaults\n󰗼 Back to Main Menu" | fzf --height=15 --header="Settings" --ansi)
 
   case "$choice" in
-  "View Current Settings")
+  *"View Current Settings")
     clear
     show_current_settings
     read -p "Press enter to continue..."
     show_settings_menu
     ;;
-  "Change Rices Directory")
+  *"Change Rices Directory")
     change_rices_directory
     ;;
-  "Change Buffer Directory")
+  *"Change Buffer Directory")
     change_buffer_directory
     ;;
-  "Toggle Symlinks Mode")
+  *"Toggle Symlinks Mode"*)
     toggle_symlinks_mode
     ;;
-  "Change Buffer Size")
+  *"Change Buffer Size"*)
     change_buffer_size
     ;;
-  "Toggle Auto Backup")
+  *"Toggle Auto Backup"*)
     toggle_auto_backup
     ;;
-  "Toggle Confirmations")
+  *"Toggle Confirmations"*)
     toggle_confirmations
     ;;
-  "Reset to Defaults")
+  *"Reset to Defaults")
     reset_settings
     read -p "Press enter to continue..."
     show_settings_menu
     ;;
-  "Back to Main Menu")
+  *"Back to Main Menu")
     show_main_menu
     ;;
   *)
     show_settings_menu
     ;;
   esac
+}
+
+show_enhanced_config_list() {
+  echo "󰈙 Available Configs in $RICES_DIR:"
+  echo "────────────────────────────────"
+  for config in "$RICES_DIR"/*; do
+    if [[ -d "$config" ]]; then
+      local config_name=$(basename "$config")
+      local file_count=$(find "$config" -type f | wc -l)
+      local size=$(du -sh "$config" 2>/dev/null | cut -f1)
+      echo "  󰚌 $config_name"
+      echo "    󰉋 Files: $file_count | 󰃢 Size: $size"
+      echo ""
+    fi
+  done
+}
+
+show_enhanced_help() {
+  echo "󰄨 Config Switcher Help"
+  echo "─────────────────────"
+  echo ""
+  echo "󰚌 Switch Config - Change current .config to selected rice"
+  echo "󰈙 List Configs - Show all available configs with details"
+  echo "󰒓 Settings - Configure application behavior"
+  echo "󰗼 Exit - Close the application"
+  echo ""
+  echo "󰘔 Navigation:"
+  echo "  ↑↓ - Move selection"
+  echo "  Enter - Confirm choice"
+  echo "  Esc - Go back/Exit"
+  echo "  Ctrl+C - Force quit"
+  echo ""
+  echo "󰒓 Current Mode: $([[ "$USE_SYMLINKS" == "true" ]] && echo "Symlinks" || echo "Copy")"
+  echo "󰆵 Buffer Size: $BUFFER_SIZE backups"
 }
 
 change_rices_directory() {
