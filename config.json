@@ -1,7 +1,18 @@
 {
-    "rices_dir": "~/Rices",
-    "buffer_dir": "~/.config_buffer",
-    "buffer_size": 2,
-    "use_symlinks": "false",
-    "configs": {}
+  "rices_dir": "~/Rices",
+  "buffer_dir": "~/.config_buffer",
+  "buffer_size": 2,
+  "use_symlinks": "true",
+  "auto_backup": false,
+  "backup_on_switch": true,
+  "confirm_actions": true,
+  "theme": "default",
+  "log_level": "info",
+  "max_log_files": 5,
+  "excluded_folders": [
+    "suck",
+    "my",
+    "arch"
+  ],
+  "notifications": true
 }

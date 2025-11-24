@@ -6,6 +6,14 @@ RICES_DIR=""
 BUFFER_DIR=""
 BUFFER_SIZE=2
 USE_SYMLINKS=false
+AUTO_BACKUP=true
+BACKUP_ON_SWITCH=true
+CONFIRM_ACTIONS=true
+THEME="default"
+LOG_LEVEL="info"
+MAX_LOG_FILES=5
+EXCLUDED_FOLDERS=()
+NOTIFICATIONS=true
 
 load_config() {
     check_dependencies
@@ -19,6 +27,18 @@ load_config() {
     BUFFER_DIR=$(expand_path "$(jq -r '.buffer_dir' "$config_path")")
     BUFFER_SIZE=$(jq -r '.buffer_size' "$config_path")
     USE_SYMLINKS=$(jq -r '.use_symlinks' "$config_path")
+    AUTO_BACKUP=$(jq -r '.auto_backup' "$config_path")
+    BACKUP_ON_SWITCH=$(jq -r '.backup_on_switch' "$config_path")
+    CONFIRM_ACTIONS=$(jq -r '.confirm_actions' "$config_path")
+    THEME=$(jq -r '.theme' "$config_path")
+    LOG_LEVEL=$(jq -r '.log_level' "$config_path")
+    MAX_LOG_FILES=$(jq -r '.max_log_files' "$config_path")
+    NOTIFICATIONS=$(jq -r '.notifications' "$config_path")
+    
+    EXCLUDED_FOLDERS=()
+    while IFS= read -r folder; do
+        EXCLUDED_FOLDERS+=("$folder")
+    done < <(jq -r '.excluded_folders[]?' "$config_path")
     
     mkdir -p "$RICES_DIR"
     if [[ "$USE_SYMLINKS" == "false" ]]; then
@@ -42,6 +62,7 @@ show_help() {
     echo "  switch <name>    Switch to specified config"
     echo "  list             List available configs" 
     echo "  buffer           Show buffer contents"
+    echo "  settings         Manage application settings"
     echo "  interactive      Launch interactive TUI"
     echo "  menu             Launch interactive TUI"
     echo "  help             Show this help"

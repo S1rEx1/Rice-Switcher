@@ -6,11 +6,13 @@ show_interactive_menu() {
             --backtitle "Config Switcher" \
             --title "Main Menu" \
             --menu "Choose an option:" \
-            15 50 4 \
+            17 55 6 \
             "1" "Switch Config" \
             "2" "List Available Configs" \
             "3" "View Buffer Contents" \
-            "4" "Exit" \
+            "4" "Settings" \
+            "5" "Help" \
+            "6" "Exit" \
             2>&1 >/dev/tty)
         
         clear
@@ -28,6 +30,13 @@ show_interactive_menu() {
                 read -p "Press enter to continue..."
                 ;;
             4)
+                show_settings_menu
+                ;;
+            5)
+                show_help
+                read -p "Press enter to continue..."
+                ;;
+            6)
                 echo "Goodbye!"
                 exit 0
                 ;;
@@ -74,32 +83,4 @@ show_config_selection_menu() {
             read -p "Press enter to continue..."
         fi
     fi
-}
-
-show_buffer_menu() {
-    local backups=()
-    local count=0
-    
-    # Read backups into array
-    for backup in "$BUFFER_DIR"/*; do
-        if [[ -d "$backup" ]]; then
-            count=$((count + 1))
-            backups+=("$count" "$(basename "$backup")")
-        fi
-    done
-    
-    if [[ $count -eq 0 ]]; then
-        dialog --msgbox "Buffer is empty" 8 40
-        return
-    fi
-    
-    choice=$(dialog --clear \
-        --backtitle "Config Switcher" \
-        --title "Buffer Management" \
-        --menu "Choose an action:" \
-        20 60 10 \
-        "${backups[@]}" \
-        2>&1 >/dev/tty)
-    
-    clear
 }
