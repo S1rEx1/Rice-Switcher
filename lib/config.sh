@@ -42,7 +42,11 @@ show_help() {
     echo "  switch <name>    Switch to specified config"
     echo "  list             List available configs" 
     echo "  buffer           Show buffer contents"
+    echo "  interactive      Launch interactive TUI"
+    echo "  menu             Launch interactive TUI"
     echo "  help             Show this help"
+    echo ""
+    echo "If no command is provided, launches interactive mode"
     echo ""
     echo "Configure paths in: $CONFIG_FILE"
 }

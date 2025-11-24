@@ -7,7 +7,7 @@ expand_path() {
 
 check_dependencies() {
     if ! command -v jq &> /dev/null; then
-        echo "Error: jq is required but not installed. Install with: sudo pacman -S jq"
+        echo "Error: jq is required but not installed. Install with: pacman -S jq"
         exit 1
     fi
 }
