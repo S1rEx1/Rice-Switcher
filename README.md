@@ -149,7 +149,7 @@ Run without arguments to launch the TUI:
 
 ```json
 {
-  "name": "HyDE",
+  "name": "some rice",
   "description": "Kul rice",
   "preview_url": "https://example.com/cool.png",
   "github_url": "https://github.com/your/rice",
