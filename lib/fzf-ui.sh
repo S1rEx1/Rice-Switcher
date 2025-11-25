@@ -1,5 +1,11 @@
 #!/bin/bash
 
+FZF_LIB_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+if [[ -f "$FZF_LIB_DIR/rices.sh" ]]; then
+  # shellcheck disable=SC1090
+  source "$FZF_LIB_DIR/rices.sh"
+fi
+
 check_fzf_dependency() {
   if ! command -v fzf &>/dev/null; then
     echo "Error: fzf is required but not installed."
@@ -20,6 +26,10 @@ show_main_menu() {
             echo "󰚌 Switch to a different config"
             echo ""
             echo "Current mode: $([[ "'"$USE_SYMLINKS"'" == "true" ]] && echo "symlinks" || echo "copy")"
+        elif [[ {} =~ "Install Rice" ]]; then
+            echo "󰏘 Install community rices"
+            echo ""
+            echo "Shows curated list with screenshots"
         elif [[ {} =~ "Settings" ]]; then
             echo "󰒓 Configure application settings"
             echo ""
@@ -32,7 +42,7 @@ show_main_menu() {
         fi
     '
 
-  local choice=$(printf "󰚌 Switch Config\n󰈙 List Configs\n󰒓 Settings\n Help\n󰗼 Exit" | fzf \
+  local choice=$(printf "󰚌 Switch Config\n󰈙 List Configs\n󰏘 Install Rice\n󰒓 Settings\n Help\n󰗼 Exit" | fzf \
     --height=15 \
     --header="🌙 Config Switcher" \
     --prompt="❯ " \
@@ -48,6 +58,12 @@ show_main_menu() {
     clear
     show_enhanced_config_list
     read -p "Press enter to continue..."
+    clear
+    show_main_menu
+    ;;
+  *"Install Rice")
+    clear
+    show_install_rice_catalog
     clear
     show_main_menu
     ;;
@@ -176,6 +192,7 @@ show_enhanced_help() {
   echo ""
   echo "󰚌 Switch Config - Change current .config to selected rice"
   echo "󰈙 List Configs - Show all available configs with details"
+  echo "󰏘 Install Rice - Browse curated presets with screenshots"
   echo "󰒓 Settings - Configure application behavior"
   echo "󰗼 Exit - Close the application"
   echo ""

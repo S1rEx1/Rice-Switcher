@@ -1,0 +1,14 @@
+[
+    {
+        "name": "HyDE",
+        "description": "Nice lightweigh hyprland rice with best theme support",
+        "github_url": "https://github.com/HyDE-Project/HyDE",
+        "install_cmd": "fastfetch"
+    },
+    {
+        "name": "Caelestia-shell",
+        "description": "Very cool quickshell hyprland rice with nice docs, community and configuring",
+        "github_url": "https://github.com/caelestia-dots/shell",
+        "install_cmd": "fastfetch"
+    }
+]
