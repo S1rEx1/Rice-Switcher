@@ -3,12 +3,12 @@
         "name": "HyDE",
         "description": "Nice lightweigh hyprland rice with best theme support",
         "github_url": "https://github.com/HyDE-Project/HyDE",
-        "install_cmd": "fastfetch"
+        "install_cmd": "git clone --depth 1 https://github.com/HyDE-Project/HyDE ~/HyDE && cd ~/HyDE/Scripts && ./install.sh"
     },
     {
         "name": "Caelestia-shell",
         "description": "Very cool quickshell hyprland rice with nice docs, community and configuring",
         "github_url": "https://github.com/caelestia-dots/shell",
-        "install_cmd": "fastfetch"
+        "install_cmd": "yay -S caelestia-meta && git clone https://github.com/caelestia-dots/caelestia.git ~/.local/share/caelestia && ~/.local/share/caelestia/install.fish"
     }
 ]

@@ -11,6 +11,7 @@ https://github.com/user-attachments/assets/0aa35c83-7151-4cab-a45a-c2b7f409e521
 - 🔄 **Two Modes** - Copy mode with backups or symlink mode for instant changes
 - 💾 **Backup System** - Automatic backup rotation in copy mode
 - ⚙️ **Easy configuration** - Customize paths, behavior, and appearance
+- 🎁 **Rice Catalog** - Install ready-made dotfile packs from a JSON list
 
 ## Quick Start
 
@@ -76,6 +77,9 @@ Run without arguments to launch the TUI:
 
 # Open settings menu
 ./config-switcher.sh settings
+
+# Launch the rice installer catalog (fzf list + previews)
+./config-switcher.sh install
 ```
 
 ## Configuration
@@ -138,4 +142,22 @@ Run without arguments to launch the TUI:
 - Keep **2-3 backups** for safety without wasting space
     
 - Name configs descriptively for easy searching
+
+## Rice catalog (json enjoyers only)
+
+- All installer entries live inside `rices.json` in the repo root. It's just an array of objects like this:
+
+```json
+{
+  "name": "HyDE",
+  "description": "Kul rice",
+  "preview_url": "https://example.com/cool.png",
+  "github_url": "https://github.com/your/rice",
+  "install_cmd": "paru -S --noconfirm your-rice"
+}
+```
+
+- Add as many as you want, one per object. FZF shows the name+description, the preview URL is simply printed (open it in the browser, I’m not streaming jpegs into your tty).
+- `install_cmd` is executed via `bash -lc`, so chain whatever you need: clone repos, copy files, pray to lua, etc.
+- No extra prompts for backups here — handle it inside your command if you care. Each rice script should be a grown-up.
     

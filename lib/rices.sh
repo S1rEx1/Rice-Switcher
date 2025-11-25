@@ -210,14 +210,10 @@ PREVIEW
   rice_name=$(jq -r '.name // "Unnamed Rice"' <<<"$entry_json")
   rice_cmd=$(jq -r '.install_cmd // ""' <<<"$entry_json")
 
-  if ! confirm "Install rice '$rice_name'?"; then
+  if ! confirm "Install rice '$rice_name'?(no backup in this app, but 90% later in script)"; then
     echo "󰜺 Installation cancelled"
     read -p "Press Enter to continue..."
     return 0
-  fi
-
-  if confirm "Make a backup of ~/.config before installing?"; then
-    backup_current_config
   fi
 
   echo "󰏘 Running install command"
